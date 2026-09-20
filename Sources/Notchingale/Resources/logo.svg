@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" width="100%" height="100%">
+  <defs>
+    <!-- Define the exact, seamlessly touching polygons of the geometric bird -->
+    <g id="bird-shapes">
+      <!-- Top Wing -->
+      <polygon points="250,120 650,450 400,400" />
+      <!-- Main Wing -->
+      <polygon points="100,340 650,450 575,600 350,580" />
+      <!-- Chest -->
+      <polygon points="650,450 800,480 500,750" />
+      <!-- Lower Belly -->
+      <polygon points="350,580 575,600 500,750" />
+      <!-- Tail -->
+      <polygon points="150,900 500,750 350,580" />
+      <!-- Neck -->
+      <polygon points="650,450 800,480 850,320 750,250" />
+      <!-- Head -->
+      <polygon points="750,250 850,320 950,220 820,150" />
+      <!-- Upper Beak -->
+      <polygon points="900,270 950,220 1080,180" />
+      <!-- Lower Beak -->
+      <polygon points="850,320 900,270 1020,280" />
+    </g>
+
+    <!-- Create a mask to cut out perfectly uniform, transparent gaps between the polygons -->
+    <mask id="gap-mask">
+      <!-- Everything white stays visible -->
+      <rect width="1200" height="1000" fill="white" />
+      <!-- The strokes of the polygons are drawn in black, making those exact edges transparent -->
+      <use href="#bird-shapes" fill="none" stroke="black" stroke-width="20" stroke-linejoin="miter" stroke-miterlimit="10" />
+    </mask>
+  </defs>
+
+  <!-- Render the bird using a rich dark charcoal/black and apply the gap mask -->
+  <use href="#bird-shapes" fill="#1d1d1b" mask="url(#gap-mask)" />
+</svg>

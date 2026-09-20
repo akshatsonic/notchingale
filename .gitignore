@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Swift Package Manager
+.build/
+Packages/
+Package.pins
+Package.resolved
+
+# Build Products
+Notchingale.app/
+
+# Xcode
+*.xcodeproj
+xcuserdata/
+DerivedData/
+.swiftpm/
