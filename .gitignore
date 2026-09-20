@@ -14,6 +14,10 @@ Notchingale.app/
 
 # Xcode
 *.xcodeproj
-xcuserdata/
+userdata/
 DerivedData/
 .swiftpm/
+
+# Brag outputs
+brag-output/
+brag-output-*/

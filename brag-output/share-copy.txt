@@ -1,1 +1,0 @@
-Made Notchingale: a native macOS workspace utility pinned right to your MacBook's hardware notch. Tasks, focus timer, notepad, and calendar events in an instant hover popover that bypasses menu bar overflow completely. Built with Swift and SwiftUI.

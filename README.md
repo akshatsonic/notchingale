@@ -11,11 +11,11 @@
 A native macOS workspace utility pinned right to the hardware notch. Notchingale brings your daily tasks, focus timer, scratchpad, and calendar events into a single hover-activated popover.
 
 <p align="center">
-  <a href="https://github.com/akshatsonic/notchingale/raw/main/brag-output/brag.mp4">
-    <img src="brag-output/demo.gif" alt="Notchingale Launch Demo Video" width="880">
+  <a href="https://github.com/akshatsonic/notchingale/raw/main/media/notchingale-launch.mp4">
+    <img src="media/demo.gif" alt="Notchingale Launch Demo Video" width="880">
   </a>
   <br>
-  <a href="https://github.com/akshatsonic/notchingale/raw/main/brag-output/brag.mp4">
+  <a href="https://github.com/akshatsonic/notchingale/raw/main/media/notchingale-launch.mp4">
     ▶ Watch the Full 1080p Launch Video with Audio (18s MP4)
   </a>
 </p>
