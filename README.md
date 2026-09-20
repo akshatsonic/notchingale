@@ -8,6 +8,10 @@
 
 # Notchingale
 
+___
+Inspired by https://www.notchowl.com/
+___
+
 A native macOS workspace utility pinned right to the hardware notch. Notchingale brings your daily tasks, focus timer, scratchpad, and calendar events into a single hover-activated popover.
 
 <p align="center">
