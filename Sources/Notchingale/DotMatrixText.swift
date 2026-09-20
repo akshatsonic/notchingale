@@ -13,7 +13,7 @@ struct DotMatrixText: View {
     var dotSpacing: CGFloat = 1.4
     var charSpacing: CGFloat = 3
     var onColor: Color = .white
-    var offColor: Color = .white.opacity(0.09)
+    var offColor: Color = .clear
 
     var body: some View {
         HStack(alignment: .center, spacing: charSpacing) {
