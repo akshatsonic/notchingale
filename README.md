@@ -1,10 +1,18 @@
 <p align="center">
-  <img src="Sources/Notchingale/Resources/logo.svg" width="128" alt="Notchingale Logo">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="Sources/Notchingale/Resources/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="Sources/Notchingale/Resources/logo.svg">
+    <img alt="Notchingale Logo" src="Sources/Notchingale/Resources/logo.svg" width="128">
+  </picture>
 </p>
 
 # Notchingale
 
 A native macOS workspace utility pinned right to the hardware notch. Notchingale brings your daily tasks, focus timer, scratchpad, and calendar events into a single hover-activated popover.
+
+<p align="center">
+  <img src="brag-output/brag.jpg" alt="Notchingale Workspace Preview" width="880">
+</p>
 
 Built with Swift, SwiftUI, and AppKit for macOS 13 and later.
 

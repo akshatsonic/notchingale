@@ -11,36 +11,47 @@ final class NotchTriggerWindowController: NSWindowController {
     private let onHoverChanged: (Bool) -> Void
     private let onRightClick: (NSView) -> Void
 
-    private let idleSize = NSSize(width: 132, height: 26)
+    private static let defaultIdleWidth: CGFloat = 132
+    private static let defaultExpandedWidth: CGFloat = 215
 
-    /// While a timer is running, the pill widens to a "universal safe"
-    /// notch width (215pt comfortably covers M1–M3 MacBook Air/Pro notch
-    /// widths — Apple doesn't expose the actual notch width via any
-    /// public API) and grows tall enough to clear the real notch cutout.
-    /// The height IS computed from a real API — `NSScreen.safeAreaInsets.top`
-    /// reports the actual unusable inset for the current display — rather
-    /// than a guessed constant, with a fallback for displays with no notch.
+    private var targetScreen: NSScreen? {
+        NSScreen.screens.first(where: { $0.frame.origin == .zero }) ?? NSScreen.main
+    }
+
+    private var idleSize: NSSize {
+        let width = targetScreen?.notchWidth ?? Self.defaultIdleWidth
+        return NSSize(width: width, height: 26)
+    }
+
+    /// While a timer is running, the pill widens to the hardware notch width
+    /// (or falls back to 215pt on non-notched screens) and grows tall enough
+    /// to clear the real notch cutout.
+    /// The height is computed from `NSScreen.safeAreaInsets.top` which
+    /// reports the actual unusable inset for the current display.
     private var expandedSize: NSSize {
-        let notchHeight = (NSScreen.screens.first(where: { $0.frame.origin == .zero }) ?? NSScreen.main)?
-            .safeAreaInsets.top ?? 32
+        let screen = targetScreen
+        let width = screen?.notchWidth ?? Self.defaultExpandedWidth
+        let notchHeight = screen?.safeAreaInsets.top ?? 32
         // Extra room below the actual cutout so the digits are clearly
         // clear of it, not sitting right at the edge.
         let clearance: CGFloat = 24
-        return NSSize(width: 215, height: max(notchHeight + clearance, idleSize.height))
+        return NSSize(width: width, height: max(notchHeight + clearance, idleSize.height))
     }
 
-    /// Tracks which size is currently "wanted" so a display change (e.g.
-    /// plugging in a monitor) can reposition using the right size, not
-    /// just reset to idle.
+    private var isExpanded: Bool = false
     private var currentSize: NSSize
 
     init(onHoverChanged: @escaping (Bool) -> Void, onRightClick: @escaping (NSView) -> Void) {
         self.onHoverChanged = onHoverChanged
         self.onRightClick = onRightClick
-        self.currentSize = NSSize(width: 132, height: 26)
+
+        let screen = NSScreen.screens.first(where: { $0.frame.origin == .zero }) ?? NSScreen.main
+        let initialWidth = screen?.notchWidth ?? Self.defaultIdleWidth
+        let initialSize = NSSize(width: initialWidth, height: 26)
+        self.currentSize = initialSize
 
         let panel = NSPanel(
-            contentRect: NSRect(origin: .zero, size: NSSize(width: 132, height: 26)),
+            contentRect: NSRect(origin: .zero, size: initialSize),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
@@ -62,7 +73,7 @@ final class NotchTriggerWindowController: NSWindowController {
         )
         panel.contentView = hoverView
 
-        setFrame(size: idleSize, animated: false)
+        setFrame(size: initialSize, animated: false)
 
         // Displays get connected/disconnected, resolutions change, the
         // menu bar can move to a different screen — any of that leaves a
@@ -88,7 +99,8 @@ final class NotchTriggerWindowController: NSWindowController {
         // own frame values can lag a moment behind the actual new layout.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             guard let self else { return }
-            self.setFrame(size: self.currentSize, animated: false)
+            let targetSize = self.isExpanded ? self.expandedSize : self.idleSize
+            self.setFrame(size: targetSize, animated: false)
         }
     }
 
@@ -103,6 +115,7 @@ final class NotchTriggerWindowController: NSWindowController {
     /// the notch cutout (a running timer); shrinks it back to the small
     /// idle pill otherwise. The top edge never moves in either case.
     func setExpanded(_ expanded: Bool) {
+        isExpanded = expanded
         setFrame(size: expanded ? expandedSize : idleSize, animated: true)
     }
 
@@ -153,7 +166,7 @@ struct TriggerPillView: View {
                     dotSpacing: 0.9,
                     charSpacing: 2.5,
                     onColor: .white.opacity(0.85),
-                    offColor: .white.opacity(0.08)
+                    offColor: .clear
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 .padding(.bottom, 8)
@@ -221,5 +234,17 @@ final class HoverableHostingView<Content: View>: NSHostingView<Content> {
 
     override func rightMouseDown(with event: NSEvent) {
         onRightClick(self)
+    }
+}
+
+extension NSScreen {
+    /// Returns the exact physical notch width in points if the screen has a hardware notch.
+    var notchWidth: CGFloat? {
+        guard let left = auxiliaryTopLeftArea,
+              let right = auxiliaryTopRightArea else {
+            return nil
+        }
+        let width = right.minX - left.maxX
+        return width > 0 ? width : nil
     }
 }

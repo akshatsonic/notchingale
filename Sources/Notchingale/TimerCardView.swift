@@ -31,7 +31,7 @@ struct TimerCardView: View {
                 dotSpacing: 2,
                 charSpacing: 5,
                 onColor: Theme.cardTextPrimary.opacity(0.85),
-                offColor: Theme.cardTextPrimary.opacity(0.08)
+                offColor: .clear
             )
 
             Text(timer.mode == .idle ? "Ready" : "Remaining")
