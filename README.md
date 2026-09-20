@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="Sources/Notchingale/Resources/logo.svg" width="128" alt="Notchingale Logo">
+</p>
+
 # Notchingale
 
 A native macOS workspace utility pinned right to the hardware notch. Notchingale brings your daily tasks, focus timer, scratchpad, and calendar events into a single hover-activated popover.
